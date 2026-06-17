@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  vault2fa:
+    image: ghcr.io/lizhenmiao/vault2fa:latest
+    container_name: vault2fa
+    ports:
+      - "3000:3000"
+    environment:
+      # ===== 存储方式（三选一）=====
+      - STORAGE_TYPE=local   # local | git | webdav
+
+      # ===== Local 本地存储配置 =====
+      - LOCAL_DATA_DIR=/app/data
+
+      # ===== Git 存储配置（支持 GitHub / Gitee / Gitea）=====
+      # GitHub 示例：
+      # - GIT_API_URL=https://api.github.com
+      # - GIT_TOKEN=ghp_xxxxxxxxxxxx
+      # - GIT_REPO=username/2fa-vault
+      #
+      # Gitee 示例：
+      # - GIT_API_URL=https://gitee.com/api/v5
+      # - GIT_TOKEN=your_gitee_token
+      # - GIT_REPO=username/2fa-vault
+      #
+      # Gitea 示例：
+      # - GIT_API_URL=https://gitea.example.com/api/v1
+      # - GIT_TOKEN=your_gitea_token
+      # - GIT_REPO=username/2fa-vault
+
+      # ===== WebDAV 存储配置 =====
+      # - WEBDAV_URL=https://dav.jianguoyun.com/dav/
+      # - WEBDAV_USERNAME=your-email@example.com
+      # - WEBDAV_PASSWORD=your-password
+      # - WEBDAV_PATH=/2fa-vault
+
+      # 端口
+      - PORT=3000
+
+    volumes:
+      # Local 存储模式时，挂载数据目录到宿主机（持久化）
+      - ./data:/app/data
+      # 日志目录持久化
+      - ./logs:/app/logs
+
+    restart: unless-stopped
+
+    # 健康检查
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

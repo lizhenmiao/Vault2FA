@@ -1,0 +1,54 @@
+# Git
+.git
+.gitignore
+
+# Node
+node_modules
+npm-debug.log
+npm-debug.log*
+
+# Go
+*.exe
+*.test
+*.out
+
+# 构建产物
+dist
+build
+web/dist
+
+# 环境变量
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# 日志
+*.log
+logs
+
+# 测试
+coverage
+
+# 数据
+data
+server/data
+
+# 文档
+README.md
+CLAUDE.md
+PROGRESS.md
+*.md
+
+# Claude
+.claude
+
